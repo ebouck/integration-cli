@@ -3,9 +3,11 @@
 require("dotenv").config();
 const { program } = require("commander");
 const nodemon = require("nodemon");
-
+const Pusher = require("pusher-js");
 const readPackage = require("../src/readPackage");
 const compileCode = require("../src/compileCode");
+const getPusherCredentials = require("../src/getPusherCredentials");
+const runTask = require("../src/runTask");
 
 program.name("somecode").description("CLI for somecode dev environment");
 // program.showHelpAfterError();
@@ -15,6 +17,21 @@ program
   .description("Automatically compile and deploy on changes to source")
   .action(async () => {
     console.log("calling nodemon");
+    const credentials = await getPusherCredentials(program);
+
+    const pusher = new Pusher(credentials.pusherKey, {
+      cluster: credentials.pusherCluster,
+    });
+
+    const subscription = pusher.subscribe(`user=${credentials.userId}`);
+
+    const handleRunLocal = async (data) => {
+      console.log("in handleRunLocal");
+      console.log("data", data);
+      await runTask(program, { taskName: data.taskName });
+    };
+    subscription.bind("runLocal", handleRunLocal);
+
     nodemon({
       ignoreRoot: [".git"],
       watch: ["src", "node_modules/@bigidea/integration-connectors/dist"],
@@ -47,10 +64,10 @@ program
   .description("Run a task")
   .argument("<name>", "Name of task to run")
   .action(async (taskName) => {
-    console.log("starting to debug");
-    const pkg = readPackage(program);
-    const handler = compileCode(program, pkg.main);
-    await handler({ action: "run", taskName });
+    await runTask(program, { taskName });
+    // const pkg = readPackage(program);
+    // const handler = compileCode(program, pkg.main);
+    // await handler({ action: "run", taskName });
   });
 
 program.option("-p, --print");
