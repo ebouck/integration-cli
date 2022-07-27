@@ -9,6 +9,7 @@ module.exports = function compileCode(program, main) {
     require,
     URL,
     URLSearchParams,
+    TextDecoder,
     global,
     console,
     process,
