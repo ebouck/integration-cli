@@ -8,6 +8,8 @@ const readPackage = require("../src/readPackage");
 const compileCode = require("../src/compileCode");
 const getPusherCredentials = require("../src/getPusherCredentials");
 const runTask = require("../src/runTask");
+const saveConsole = require("../src/saveConsole");
+const restoreConsole = require("../src/restoreConsole");
 
 program
   .name("integration")
@@ -43,9 +45,13 @@ program
     });
 
     nodemon.on("exit", async () => {
+      const sc = saveConsole();
+
       const pkg = readPackage(program);
       const handler = compileCode(program, pkg.main);
       await handler({ action: "deploy" });
+
+      restoreConsole(sc);
     });
   });
 
@@ -53,9 +59,13 @@ program
   .command("deploy")
   .description("Deploy the integrations to the dev environment")
   .action(async () => {
+    const sc = saveConsole();
+
     const pkg = readPackage(program);
     const handler = compileCode(program, pkg.main);
     await handler({ action: "deploy" });
+
+    restoreConsole(sc);
   });
 
 program
@@ -63,10 +73,11 @@ program
   .description("Run a task")
   .argument("<name>", "Name of task to run")
   .action(async (taskName) => {
+    const sc = saveConsole();
+
     await runTask(program, { taskName });
-    // const pkg = readPackage(program);
-    // const handler = compileCode(program, pkg.main);
-    // await handler({ action: "run", taskName });
+
+    restoreConsole(sc);
   });
 
 program.option("-p, --print");

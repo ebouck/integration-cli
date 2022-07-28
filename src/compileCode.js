@@ -2,6 +2,8 @@ const fs = require("fs");
 const vm = require("node:vm");
 
 module.exports = function compileCode(program, main) {
+  console.log("compiling code");
+
   const code = fs.readFileSync(main);
 
   const context = {
@@ -19,6 +21,8 @@ module.exports = function compileCode(program, main) {
   const script = new vm.Script(code.toString());
 
   script.runInContext(context);
+
+  // console.log = originalConsole.log;
 
   if (!context.exports.handler) {
     program.error("Can't find export 'handler'");
