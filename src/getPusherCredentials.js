@@ -17,9 +17,5 @@ module.exports = async function getPusherCredentials(program) {
     },
   });
 
-  const data = await response.json();
-
-  console.log("data", data);
-
-  return data;
+  return await response.json();
 };
