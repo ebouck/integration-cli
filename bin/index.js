@@ -73,11 +73,7 @@ program
   .description("Run a task")
   .argument("<name>", "Name of task to run")
   .action(async (taskName) => {
-    const sc = saveConsole();
-
     await runTask(program, { taskName });
-
-    restoreConsole(sc);
   });
 
 program.option("-p, --print");
