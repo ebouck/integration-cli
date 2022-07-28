@@ -4,8 +4,7 @@
   "description": "",
   "main": "bin/index.js",
   "bin": {
-    "usesomecode": "./bin/index.js",
-    "somecode": "./bin/index.js"
+    "integration": "./bin/index.js"
   },
   "scripts": {
     "test": "jest",
