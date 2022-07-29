@@ -4,24 +4,21 @@ const compileCode = require("./compileCode");
 const saveConsole = require("../src/saveConsole");
 const restoreConsole = require("../src/restoreConsole");
 
-module.exports = async function runTask(program, { taskName }) {
+module.exports = async function runTask(program, { taskName, data }) {
   const baseUrl = process.env.BASE_URL;
   const envName = process.env.ENV_NAME;
   const apiKey = process.env.API_KEY;
 
-  const sc = saveConsole();
-
   const pkg = readPackage(program);
-  const handler = compileCode(program, pkg.main);
-  const handlerResult = await handler({ action: "run", taskName });
 
-  restoreConsole(sc);
+  const handler = compileCode(program, pkg.main);
+  const handlerResult = await handler({ action: "run", taskName, data });
 
   const { statusCode, body } = handlerResult;
 
-  const data = JSON.parse(body);
+  const responseData = JSON.parse(body);
 
-  const { logs } = data;
+  const { logs } = responseData;
 
   const status = statusCode >= 300 ? "FAILURE" : "SUCCESS";
 

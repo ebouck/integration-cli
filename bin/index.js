@@ -28,10 +28,14 @@ program
 
     const subscription = pusher.subscribe(`user=${credentials.userId}`);
 
-    const handleRunLocal = async (data) => {
+    const handleRunLocal = async (props) => {
       console.log("in handleRunLocal");
-      console.log("data", data);
-      await runTask(program, { taskName: data.taskName });
+      console.log("props", props);
+      // const sc = saveConsole();
+
+      await runTask(program, { taskName: props.taskName, data: props.data });
+
+      // restoreConsole(sc);
     };
     subscription.bind("runLocal", handleRunLocal);
 
@@ -45,13 +49,13 @@ program
     });
 
     nodemon.on("exit", async () => {
-      const sc = saveConsole();
+      // const sc = saveConsole();
 
       const pkg = readPackage(program);
       const handler = compileCode(program, pkg.main);
       await handler({ action: "deploy" });
 
-      restoreConsole(sc);
+      // restoreConsole(sc);
     });
   });
 
@@ -59,13 +63,13 @@ program
   .command("deploy")
   .description("Deploy the integrations to the dev environment")
   .action(async () => {
-    const sc = saveConsole();
+    // const sc = saveConsole();
 
     const pkg = readPackage(program);
     const handler = compileCode(program, pkg.main);
     await handler({ action: "deploy" });
 
-    restoreConsole(sc);
+    // restoreConsole(sc);
   });
 
 program
@@ -73,7 +77,11 @@ program
   .description("Run a task")
   .argument("<name>", "Name of task to run")
   .action(async (taskName) => {
+    // const sc = saveConsole();
+
     await runTask(program, { taskName });
+
+    // restoreConsole(sc);
   });
 
 program.option("-p, --print");
