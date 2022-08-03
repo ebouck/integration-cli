@@ -7,6 +7,7 @@ const Pusher = require("pusher-js");
 const readPackage = require("../src/readPackage");
 const compileCode = require("../src/compileCode");
 const getPusherCredentials = require("../src/getPusherCredentials");
+const deploy = require("../src/deploy");
 const runTask = require("../src/runTask");
 const saveConsole = require("../src/saveConsole");
 const restoreConsole = require("../src/restoreConsole");
@@ -51,9 +52,11 @@ program
     nodemon.on("exit", async () => {
       // const sc = saveConsole();
 
-      const pkg = readPackage(program);
-      const handler = compileCode(program, pkg.main);
-      await handler({ action: "deploy" });
+      // const pkg = readPackage(program);
+      // const handler = compileCode(program, pkg.main);
+      // await handler({ action: "deploy" });
+
+      await deploy(program);
 
       // restoreConsole(sc);
     });
@@ -65,9 +68,11 @@ program
   .action(async () => {
     // const sc = saveConsole();
 
-    const pkg = readPackage(program);
-    const handler = compileCode(program, pkg.main);
-    await handler({ action: "deploy" });
+    // const pkg = readPackage(program);
+    // const handler = compileCode(program, pkg.main);
+    // await handler({ action: "deploy" });
+
+    await deploy(program);
 
     // restoreConsole(sc);
   });
