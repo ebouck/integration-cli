@@ -34,7 +34,11 @@ program
       console.log("props", props);
       // const sc = saveConsole();
 
-      await runTask(program, { taskName: props.taskName, data: props.data });
+      await runTask(program, {
+        taskName: props.taskName,
+        data: props.data,
+        deliveryId: props.deliveryId,
+      });
 
       // restoreConsole(sc);
     };

@@ -4,7 +4,10 @@ const compileCode = require("./compileCode");
 const saveConsole = require("../src/saveConsole");
 const restoreConsole = require("../src/restoreConsole");
 
-module.exports = async function runTask(program, { taskName, data }) {
+module.exports = async function runTask(
+  program,
+  { taskName, data, deliveryId }
+) {
   const baseUrl = process.env.BASE_URL;
   const envName = process.env.ENV_NAME;
   const apiKey = process.env.API_KEY;
@@ -32,6 +35,7 @@ module.exports = async function runTask(program, { taskName, data }) {
       status,
       taskName,
       logs,
+      deliveryId,
     }),
   });
 
