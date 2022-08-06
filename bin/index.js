@@ -4,6 +4,7 @@ require("dotenv").config();
 const { program } = require("commander");
 const nodemon = require("nodemon");
 const Pusher = require("pusher-js");
+const pako = require("pako");
 const readPackage = require("../src/readPackage");
 const compileCode = require("../src/compileCode");
 const getPusherCredentials = require("../src/getPusherCredentials");
@@ -34,10 +35,17 @@ program
       console.log("props", props);
       // const sc = saveConsole();
 
+      const { compressedPayloadB64 } = props;
+      const compressedPayload = Buffer.from(compressedPayloadB64, "base64");
+      const payloadStr = pako.inflate(compressedPayload, { to: "string" });
+      const payload = JSON.parse(payloadStr);
+
+      console.log("payload", payload);
+
       await runTask(program, {
-        taskName: props.taskName,
-        data: props.data,
-        deliveryId: props.deliveryId,
+        taskName: payload.taskName,
+        data: payload.data,
+        deliveryId: payload.deliveryId,
       });
 
       // restoreConsole(sc);
