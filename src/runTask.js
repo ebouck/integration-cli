@@ -1,6 +1,7 @@
 const fetch = require("node-fetch");
 const readPackage = require("./readPackage");
-const compileCode = require("./compileCode");
+const getCompiledCode = require("./getCompileCoded");
+const runInContext = require("./runInContext");
 const saveConsole = require("../src/saveConsole");
 const restoreConsole = require("../src/restoreConsole");
 
@@ -14,8 +15,14 @@ module.exports = async function runTask(
 
   const pkg = readPackage(program);
 
-  const handler = compileCode(program, pkg.main);
-  const handlerResult = await handler({ action: "run", taskName, data });
+  const compiledCode = getCompiledCode(program, pkg.main);
+  const handler = runInContext(program, compiledCode);
+
+  const handlerResult = await handler({
+    action: "run",
+    taskName,
+    data,
+  });
 
   const { statusCode, body } = handlerResult;
 

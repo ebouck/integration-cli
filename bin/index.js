@@ -6,8 +6,9 @@ const nodemon = require("nodemon");
 const Pusher = require("pusher-js");
 const pako = require("pako");
 const readPackage = require("../src/readPackage");
-const compileCode = require("../src/compileCode");
+const compileCode = require("../src/runInContext");
 const getPusherCredentials = require("../src/getPusherCredentials");
+const undeploy = require("../src/undeploy");
 const deploy = require("../src/deploy");
 const runTask = require("../src/runTask");
 const saveConsole = require("../src/saveConsole");
@@ -68,6 +69,7 @@ program
       // const handler = compileCode(program, pkg.main);
       // await handler({ action: "deploy" });
 
+      await undeploy(program);
       await deploy(program);
 
       // restoreConsole(sc);
@@ -84,6 +86,7 @@ program
     // const handler = compileCode(program, pkg.main);
     // await handler({ action: "deploy" });
 
+    await undeploy(program);
     await deploy(program);
 
     // restoreConsole(sc);

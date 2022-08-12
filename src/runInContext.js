@@ -1,11 +1,7 @@
 const fs = require("fs");
 const vm = require("node:vm");
 
-module.exports = function compileCode(program, main) {
-  console.log("compiling code");
-
-  const code = fs.readFileSync(main);
-
+module.exports = function compileCode(program, code) {
   const context = {
     exports: {},
     require,
