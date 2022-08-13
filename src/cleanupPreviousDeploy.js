@@ -1,7 +1,7 @@
 const getMostRecentDeploy = require("./getMostRecentDeploy");
 const runInContext = require("./runInContext");
 
-module.exports = async function undeploy(program) {
+module.exports = async function cleanupPreviousDeploy(program) {
   // get code from previous deploy
   const compiledCodeStr = await getMostRecentDeploy(program);
   if (compiledCodeStr) {
@@ -9,7 +9,7 @@ module.exports = async function undeploy(program) {
     // run in context
     const handler = runInContext(program, compiledCode);
     // call handler with action undeploy
-    const handlerResult = await handler({ action: "undeploy" });
+    const handlerResult = await handler({ action: "cleanup" });
 
     console.log("handlerResult", handlerResult);
 
