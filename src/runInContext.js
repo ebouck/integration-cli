@@ -11,6 +11,8 @@ module.exports = function compileCode(program, code) {
     global,
     console,
     process,
+    Buffer,
+    clearTimeout,
   };
   vm.createContext(context);
 
