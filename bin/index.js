@@ -13,6 +13,8 @@ const deploy = require("../src/deploy");
 const runTask = require("../src/runTask");
 const saveConsole = require("../src/saveConsole");
 const restoreConsole = require("../src/restoreConsole");
+const subscribe = require("../src/subscribe");
+const unsubscribe = require("../src/unsubscribe");
 
 program
   .name("integration")
@@ -69,8 +71,10 @@ program
       // const handler = compileCode(program, pkg.main);
       // await handler({ action: "deploy" });
 
-      await cleanupPreviousDeploy(program);
       await deploy(program);
+
+      await unsubscribe(program);
+      await subscribe(program);
 
       // restoreConsole(sc);
     });
@@ -86,8 +90,10 @@ program
     // const handler = compileCode(program, pkg.main);
     // await handler({ action: "deploy" });
 
-    await cleanupPreviousDeploy(program);
     await deploy(program);
+
+    await unsubscribe(program);
+    await subscribe(program);
 
     // restoreConsole(sc);
   });

@@ -6,6 +6,7 @@ module.exports = async function cleanupPreviousDeploy(program) {
   const compiledCodeStr = await getMostRecentDeploy(program);
   if (compiledCodeStr) {
     const compiledCode = Buffer.from(compiledCodeStr, "utf-8");
+    // const compiledCode = compiledCodeStr;
     // run in context
     const handler = runInContext(program, compiledCode);
     // call handler with action undeploy
