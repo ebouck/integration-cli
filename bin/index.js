@@ -15,11 +15,33 @@ const saveConsole = require("../src/saveConsole");
 const restoreConsole = require("../src/restoreConsole");
 const subscribe = require("../src/subscribe");
 const unsubscribe = require("../src/unsubscribe");
+const execa = require("execa");
 
 program
   .name("integration")
   .description("CLI for bigidea integration dev environment");
 // program.showHelpAfterError();
+
+program
+  .command("create <repo>")
+  .description("Create a new integration project directory from template")
+  .action(async (repo) => {
+    console.log("ready to create repo", repo);
+
+    try {
+      await execa("gh", [
+        "repo",
+        "create",
+        repo,
+        "--template=ebouck/integration-template",
+        "--private",
+        "--clone",
+      ]);
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  });
 
 program
   .command("dev")
