@@ -19,6 +19,7 @@ module.exports = async function unsubscribe(program) {
       const handlerResult = await handler({
         action: "unsubscribe",
         subscriptionName,
+        removed: true,
       });
     }
 
@@ -26,6 +27,7 @@ module.exports = async function unsubscribe(program) {
       const handlerResult = await handler({
         action: "unsubscribe",
         subscriptionName,
+        removed: false,
       });
     }
 
